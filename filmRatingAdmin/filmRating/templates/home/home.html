@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    <section class="container mt-4 d-flex flex-wrap justify-content-around">
+        {% for film in films %}
+            <div class="card bg-dark text-white mb-3" style="width: 18rem;">
+                <img class="card-img-top" src="..." alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{ film.name | title }}</h5>
+                    <p class="card-subtitle text-white-50 mb-3">{{ film.category.first.name }}</p>
+                    <p class="card-text mb-3">{{ film.description | slice:30 }}...</p>
+                    <p class="card-text mb-1">
+                        coe <i class="fas fa-star"></i>
+                    </p>
+                    <a href="#" class="btn btn-primary">Favoritar</a>
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+{% endblock %}

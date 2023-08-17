@@ -46,6 +46,10 @@ class ProfileAdmin(admin.ModelAdmin):
         "user__username",
     ]
 
+    readonly_fields = [
+        "favorites",
+    ]
+
 
 class CategoryAdmin(admin.ModelAdmin):
     search_fields = [

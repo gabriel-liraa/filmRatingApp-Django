@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Perfil{% endblock %}
+{% block content %}
+    {{ profile.user.username }}
+    {% if films %}
+        {% for film in films %}{{ film.name }}{% endfor %}
+    {% else %}
+        Nenhum filme criado ainda!
+    {% endif %}
+    {{ profile.created_at }}
+{% endblock %}

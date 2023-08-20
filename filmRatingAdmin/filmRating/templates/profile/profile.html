@@ -1,11 +1,64 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Perfil{% endblock %}
 {% block content %}
-    {{ profile.user.username }}
-    {% if films %}
-        {% for film in films %}{{ film.name }}{% endfor %}
-    {% else %}
-        Nenhum filme criado ainda!
-    {% endif %}
-    {{ profile.created_at }}
+    <section class="vh-100 row">
+        <div class="container py-5 h-100 col-4 p-5">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="card-body text-center">
+                    <div class="mt-3 mb-4">
+                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
+                             class="rounded-circle img-fluid"
+                             style="width: 100px" />
+                    </div>
+                    <h4 class="mb-2">Julie L. Arsenault</h4>
+                    <p class="text-muted mb-4">
+                        @Programmer <span class="mx-2">|</span> <a href="#!">mdbootstrap.com</a>
+                    </p>
+                    <button type="button" class="btn btn-primary btn-rounded btn-lg">Message now</button>
+                    <div class="d-flex justify-content-between text-center mt-5 mb-2">
+                        <div>
+                            <p class="mb-2 h5">8471</p>
+                            <p class="text-muted mb-0">Wallets Balance</p>
+                        </div>
+                        <div class="px-3">
+                            <p class="mb-2 h5">8512</p>
+                            <p class="text-muted mb-0">Income amounts</p>
+                        </div>
+                        <div>
+                            <p class="mb-2 h5">4751</p>
+                            <p class="text-muted mb-0">Total Transactions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            <h3 class="text-center">Filmes criados:</h3>
+            <section class="container mt-4 d-flex flex-wrap justify-content-around">
+                {% for film in films %}
+                    <div class="card bg-dark text-white mb-3" style="width: 18rem;">
+                        <img class="card-img-top" src="..." alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ film.name | title | slice:30 }}</h5>
+                            <p class="card-subtitle text-white-50 mb-3">{{ film.category.first.name }}</p>
+                            <p class="card-text mb-3">{{ film.description | slice:30 }}...</p>
+                            <p class="card-text mb-1">
+                                Nota: <i class="fa-sharp fa-solid fa-star"></i>
+                            </p>
+                            <form action="/favorite/{{ film.id }}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" value="{{ request.GET.search }}" name="search">
+                                <input type="hidden" value="{{ request.GET.page }}" name="page">
+                                <button type="submit" class="btn btn-danger">
+                                    Favoritar <i class="fa-sharp fa-solid fa-heart"></i>
+                                </button>
+                            </form>
+                            <span class="bi bi-heart"></span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </section>
+        </div>
+    </section>
 {% endblock %}

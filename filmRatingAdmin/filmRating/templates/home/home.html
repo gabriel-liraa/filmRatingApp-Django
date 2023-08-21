@@ -7,7 +7,9 @@
     <section class="container mt-4 d-flex flex-wrap justify-content-around">
         {% for film in films %}
             <div class="card bg-dark text-white mb-3" style="width: 18rem;">
-                <img class="card-img-top" src="..." alt="Card image cap">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
+                     class="rounded-circle img-fluid mx-auto"
+                     style="width: 100px" />
                 <div class="card-body">
                     <h5 class="card-title">{{ film.name | title | slice:30 }}</h5>
                     <p class="card-subtitle text-white-50 mb-3">{{ film.category.first.name }}</p>
@@ -41,7 +43,7 @@
                 </li>
             {% endif %}
             <li class="page-item">
-                <a class="page-link" href="{% url 'home' %}">Ínicio</a>
+                <a class="page-link" href="?page=1&{{ parameters }}">Ínicio</a>
             </li>
             <li class="page-item disabled">
                 <a class="page-link" href="">Página {{ films.number }} de {{ films.paginator.num_pages }}</a>

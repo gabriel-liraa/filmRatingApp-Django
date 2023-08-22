@@ -1,4 +1,5 @@
 from filmRating.models import *
+from django.db.models import Sum, Count
 
 
 class Film(models.Model):
@@ -13,3 +14,13 @@ class Film(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+    @property
+    def stars(self):
+        data = self.ratings.aggregate(Sum("value"), Count("id"))
+        if data["id__count"] < 1:
+            return "Sem Avaliações"
+
+        stars = data["value__sum"] / data["id__count"]
+        stars = round(stars, 2)
+        return stars

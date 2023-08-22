@@ -21,4 +21,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("filmRating.urls.HomeUrls")),
     path("profile/<int:id>/", include("filmRating.urls.ProfileUrls")),
+    path("favorites/", include("filmRating.urls.FavoritesUrls")),
 ]

@@ -1,8 +1,7 @@
 from filmRating.models.Profile import Profile
 from filmRating.models.Film import Film
 from django.core.paginator import Paginator
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 
 def profile_view(request, id):
@@ -23,4 +22,7 @@ def profile_view(request, id):
         return render(request, "profile/profile.html", context=context, status=200)
 
     except:
-        return HttpResponse("Erro")
+        msg = "Impossível acessar perfil."
+        _type = "danger"
+        parameters = f"?msg={msg}&type={_type}"
+        return redirect(to=f"/{parameters}", status=200)

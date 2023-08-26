@@ -9,12 +9,20 @@
             <h3 class="mb-4">Nenhum filme encontrado...</h3>
         </div>
     {% else %}
+        <h1 class="text-center">
+            {% block page_title %}{% endblock %}
+        </h1>
         <section class="container mt-4 d-flex flex-wrap justify-content-around">
             {% for film in films %}
                 <div class="card bg-dark text-white mb-3" style="width: 18rem;">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
-                         class="rounded-circle img-fluid mx-auto"
-                         style="width: 100px" />
+                    {% if film.img %}
+                        <img src={{ film.img.url }} class="rounded-circle img-fluid mx-auto mt-3" style="width: 100px; height: 100px;" />
+                    {% else %}
+                        <img src="https://img.freepik.com/free-icon/weight_318-857258.jpg?t=st=1692709343~exp=1692709943~hmac=aee839f93c479255d6e991f20fbc4a96d7270125ce0541f8deb093719d7ed6ab"
+                             class="rounded-circle img-fluid mx-auto mt-3"
+                             style="width: 100px;
+                                    height: 100px" />
+                    {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ film.name | title | slice:30 }}</h5>
                         <p class="card-subtitle text-white-50 mb-3">{{ film.category.first.name }}</p>
@@ -22,14 +30,27 @@
                         <p class="card-text mb-1">
                             {{ film.stars }} <i class="fa-sharp fa-solid fa-star"></i>
                         </p>
-                        <form action="/favorite/{{ film.id }}" method="POST">
-                            {% csrf_token %}
-                            <input type="hidden" value="{{ request.GET.search }}" name="search">
-                            <input type="hidden" value="{{ request.GET.page }}" name="page">
-                            <button type="submit" class="btn btn-danger">
-                                Favoritar <i class="fa-sharp fa-solid fa-heart"></i>
-                            </button>
-                        </form>
+                        {% if film in request.user.profile.favorites.all %}
+                            <form action={% url "remove-favorite" film.id %} method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" value="{{ request.path }}" name="path">
+                                <input type="hidden" value="{{ request.GET.search }}" name="search">
+                                <input type="hidden" value="{{ request.GET.page }}" name="page">
+                                <button type="submit" class="btn btn-danger">
+                                    Remover Favorito <i class="fa-sharp fa-solid fa-heart"></i>
+                                </button>
+                            </form>
+                        {% else %}
+                            <form action={% url "add-favorite" film.id %} method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" value="{{ request.path }}" name="path">
+                                <input type="hidden" value="{{ request.GET.search }}" name="search">
+                                <input type="hidden" value="{{ request.GET.page }}" name="page">
+                                <button type="submit" class="btn btn-danger">
+                                    Favoritar <i class="fa-sharp fa-solid fa-heart"></i>
+                                </button>
+                            </form>
+                        {% endif %}
                         <span class="bi bi-heart"></span>
                     </div>
                 </div>

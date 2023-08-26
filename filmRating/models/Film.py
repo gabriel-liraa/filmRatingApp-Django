@@ -8,6 +8,7 @@ class Film(models.Model):
     )
     name = models.CharField(max_length=50)
     description = models.TextField(blank=True, null=True)
+    img = models.ImageField(null=True, blank=True)
     category = models.ManyToManyField(Category, related_name="films_categories")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+    <div id="content">
+        <div class="container-fluid mt-5">
+            <div class="text-center form-group">
+                <form class="col-md-6 col-lg-6 offset-md-3 offset-lg-3 mt-5 mb-3"
+                      method="POST"
+                      action="">
+                    {% csrf_token %}
+                    {{ forms.as_p }}
+                    <button type="submit" class="btn btn-primary mt-2">Entrar</button>
+                </form>
+                <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                   href="#">Cadastrar novo usuário</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

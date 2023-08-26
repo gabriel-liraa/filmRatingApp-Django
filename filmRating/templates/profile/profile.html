@@ -7,16 +7,23 @@
             <div class="row d-flex justify-content-center align-items-center">
                 <div class="card-body text-center">
                     <div class="mt-3 mb-4">
-                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
-                             class="rounded-circle img-fluid"
-                             style="width: 100px" />
+                        {% if profile.img %}
+                            <img src={{ profile.img.url }} class="rounded-circle img-fluid mt-3" style="width: 100px; height=100px;" />
+                        {% else %}
+                            <img src="https://img.freepik.com/free-icon/user_318-644324.jpg?t=st=1692709690~exp=1692710290~hmac=9205ae2adadedae9ec74c603df1a17df1e9e6d3e4f0f75fa746614e963012cf6"
+                                 class="rounded-circle img-fluid mt-3"
+                                 style="width: 100px;
+                                        height=100px" />
+                        {% endif %}
                     </div>
                     <h4 class="mb-2">{{ profile.user.username | title }}</h4>
                     <p class="text-muted mb-4">{{ profile.user.email }}</p>
                     {% if request.user == profile.user %}
-                        <button type="button" class="btn btn-primary btn-rounded btn-lg">
-                            Editar Perfil <i class="fa-solid fa-edit"></i>
-                        </button>
+                        <a href={% url "edit-profile" %}>
+                            <button type="button" class="btn btn-primary btn-rounded btn-lg">
+                                Editar Perfil <i class="fa-solid fa-edit"></i>
+                            </button>
+                        </a>
                     {% endif %}
                     <div class="d-flex justify-content-between text-center mt-5 mb-2">
                         <div>
@@ -40,9 +47,14 @@
             <section class="container mt-4 d-flex flex-wrap justify-content-around">
                 {% for film in films %}
                     <div class="card bg-dark text-white mb-3" style="width: 18rem;">
-                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
-                             class="rounded-circle img-fluid mx-auto"
-                             style="width: 100px" />
+                        {% if film.img %}
+                            <img src={{ film.img.url }} class="rounded-circle img-fluid mx-auto mt-3" style="width: 100px; height: 100px;" />
+                        {% else %}
+                            <img src="https://img.freepik.com/free-icon/weight_318-857258.jpg?t=st=1692709343~exp=1692709943~hmac=aee839f93c479255d6e991f20fbc4a96d7270125ce0541f8deb093719d7ed6ab"
+                                 class="rounded-circle img-fluid mx-auto mt-3"
+                                 style="width: 100px;
+                                        height: 100px" />
+                        {% endif %}
                         <div class="card-body">
                             <h5 class="card-title">{{ film.name | title | slice:30 }}</h5>
                             <p class="card-subtitle text-white-50 mb-3">{{ film.category.first.name }}</p>
@@ -50,7 +62,7 @@
                             <p class="card-text mb-1">
                                 {{ film.stars }}<i class="fa-sharp fa-solid fa-star"></i>
                             </p>
-                            <form action="/favorite/{{ film.id }}" method="POST">
+                            <form action={% url "add-favorite" film.id %} method="POST">
                                 {% csrf_token %}
                                 <input type="hidden" value="{{ request.GET.search }}" name="search">
                                 <input type="hidden" value="{{ request.GET.page }}" name="page">

@@ -1,1 +1,4 @@
-from filmRating.views.HomeViews import home
+from .HomeViews import *
+from .FavoritesViews import *
+from .ProfileViews import *
+from .UserViews import *

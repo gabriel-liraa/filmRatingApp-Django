@@ -15,14 +15,17 @@ def login_view(request):
         else:
             msg = "Erro ao fazer login."
             _type = "danger"
-            return redirect(to=f"/?msg={msg}&type={_type}")
+            return redirect(to=f"/user/login/?msg={msg}&type={_type}")
 
     else:
         forms = UserLoginForm()
         context = {
             "forms": forms,
+            "title": "Login",
+            "submit_text": "Entrar",
+            "login_bool": True,
         }
-        return render(request, "user/login.html", context=context, status=200)
+        return render(request, "user/auth.html", context=context, status=200)
 
 
 def logout_view(request):
@@ -31,9 +34,60 @@ def logout_view(request):
 
 
 def register_user_view(request):
-    forms = UserRegisterForm()
-    context = {
-        "forms": forms,
-    }
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            return redirect(to="home")
 
-    return render(request, "user/register.html", context=context, status=200)
+        username = request.POST.get("username")
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        register_form = UserRegisterForm(request.POST)
+
+        if register_form.is_valid():
+            verify_username = User.objects.filter(username=username).first()
+            verify_email = User.objects.filter(email=email).first()
+
+            if verify_username is not None:
+                msg = "Nome de usuário já existente"
+                _type = "danger"
+                return redirect(to=f"/user/register/?msg={msg}&type={_type}")
+
+            elif verify_email is not None:
+                msg = "Email já existente"
+                _type = "danger"
+                return redirect(to=f"/user/register/?msg={msg}&type={_type}")
+
+            else:
+                user = User.objects.create(
+                    username=username, email=email, password=password
+                )
+                user.first_name = first_name
+                user.last_name = last_name
+                user.save()
+
+                if user is not None:
+                    msg = "Usuário criado com sucesso!"
+                    _type = "success"
+                    return redirect(to=f"/user/login/?msg={msg}&type={_type}")
+
+                else:
+                    msg = "Erro ao criar usuário."
+                    _type = "danger"
+                    return redirect(to=f"/user/register/?msg={msg}&type={_type}")
+
+        msg = "Erro ao criar usuário."
+        _type = "danger"
+        return redirect(to=f"/user/register/?msg={msg}&type={_type}")
+
+    else:
+        forms = UserRegisterForm()
+        context = {
+            "forms": forms,
+            "title": "Registrar",
+            "submit_text": "Cadastrar",
+            "login_bool": False,
+        }
+
+        return render(request, "user/auth.html", context=context, status=200)

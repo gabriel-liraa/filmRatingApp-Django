@@ -7,13 +7,14 @@ from filmRating.forms.UserForms import UserLoginForm, UserRegisterForm
 def login_view(request):
     if request.method == "POST":
         user_login = authenticate(
-            username=request.POST.get("username"), password=request.POST.get("password")
+            username=request.POST.get("username"),
+            password=request.POST.get("password"),
         )
         if user_login is not None:
             login(request, user_login)
             return redirect(to="home")
         else:
-            msg = "Erro ao fazer login."
+            msg = f"Combinação de usuário e senha não encontrada."
             _type = "danger"
             return redirect(to=f"/user/login/?msg={msg}&type={_type}")
 
@@ -60,24 +61,23 @@ def register_user_view(request):
                 return redirect(to=f"/user/register/?msg={msg}&type={_type}")
 
             else:
-                user = User.objects.create(
-                    username=username, email=email, password=password
-                )
-                user.first_name = first_name
-                user.last_name = last_name
-                user.save()
-
-                if user is not None:
-                    msg = "Usuário criado com sucesso!"
+                try:
+                    user = User.objects.create_user(
+                        username=username, email=email, password=password
+                    )
+                    user.first_name = first_name
+                    user.last_name = last_name
+                    user.save()
+                    msg = f"Usuário criado com sucesso!"
                     _type = "success"
                     return redirect(to=f"/user/login/?msg={msg}&type={_type}")
 
-                else:
+                except:
                     msg = "Erro ao criar usuário."
                     _type = "danger"
                     return redirect(to=f"/user/register/?msg={msg}&type={_type}")
 
-        msg = "Erro ao criar usuário."
+        msg = "Erro no form"
         _type = "danger"
         return redirect(to=f"/user/register/?msg={msg}&type={_type}")
 

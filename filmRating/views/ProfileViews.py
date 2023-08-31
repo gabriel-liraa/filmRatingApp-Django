@@ -3,21 +3,22 @@ from filmRating.models.Film import Film
 from filmRating.forms.UserProfileForm import UserProfileForm, UserForm
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.models import User
 
 
 def profile_view(request, id):
     try:
         profile = Profile.objects.filter(user__id=id)[0]
-        films = Film.objects.filter(owner__id=id).all()
+        created_films = Film.objects.filter(owner__id=id).all()
 
-        if len(films) > 0:
-            paginator = Paginator(films, 2)
+        if len(created_films) > 0:
+            paginator = Paginator(created_films, 2)
             page = request.GET.get("page")
-            films = paginator.get_page(page)
+            created_films = paginator.get_page(page)
 
         context = {
             "profile": profile,
-            "films": films,
+            "created_films": created_films,
         }
 
         return render(request, "profile/profile.html", context=context, status=200)

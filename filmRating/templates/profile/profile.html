@@ -27,7 +27,7 @@
                     {% endif %}
                     <div class="d-flex justify-content-between text-center mt-5 mb-2">
                         <div>
-                            <p class="mb-2 h5">{{ films.paginator.count }}</p>
+                            <p class="mb-2 h5">{{ films.paginator.count | default:"0" }}</p>
                             <p class="text-muted mb-0">Filmes Criados</p>
                         </div>
                         <div class="px-3">
@@ -36,7 +36,9 @@
                         </div>
                         <div>
                             <p class="mb-2 h5">{{ profile.favorites.all|length }}</p>
-                            <p class="text-muted mb-0">Filmes Favoritados</p>
+                            <a href={% url "favorites" %}>
+                                <p class="text-muted mb-0">Filmes Favoritados</p>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -45,7 +47,7 @@
         <div class="col-sm-8">
             <h3 class="text-center">Filmes Criados:</h3>
             <section class="container mt-4 d-flex flex-wrap justify-content-around">
-                {% for film in films %}
+                {% for film in created_films %}
                     <div class="card bg-dark text-white mb-3" style="width: 18rem;">
                         {% if film.img %}
                             <img src={{ film.img.url }} class="rounded-circle img-fluid mx-auto mt-3" style="width: 100px; height: 100px;" />
@@ -62,15 +64,29 @@
                             <p class="card-text mb-1">
                                 {{ film.stars }}<i class="fa-sharp fa-solid fa-star"></i>
                             </p>
-                            <form action={% url "add-favorite" film.id %} method="POST">
-                                {% csrf_token %}
-                                <input type="hidden" value="{{ request.GET.search }}" name="search">
-                                <input type="hidden" value="{{ request.GET.page }}" name="page">
-                                <button type="submit" class="btn btn-danger">
-                                    Favoritar <i class="fa-sharp fa-solid fa-heart"></i>
-                                </button>
-                            </form>
-                            <span class="bi bi-heart"></span>
+                            {% if film in request.user.profile.favorites.all %}
+                                <form action={% url "remove-favorite" film.id %} method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="{{ request.path }}" name="path">
+                                    <input type="hidden" value="{{ request.GET.search }}" name="search">
+                                    <input type="hidden" value="{{ request.GET.page }}" name="page">
+                                    <button type="submit" class="btn btn-danger">
+                                        Desfavoritar <i class="fa-sharp fa-solid fa-heart"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-success">Avaliar</button>
+                                </form>
+                            {% else %}
+                                <form action={% url "add-favorite" film.id %} method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="{{ request.path }}" name="path">
+                                    <input type="hidden" value="{{ request.GET.search }}" name="search">
+                                    <input type="hidden" value="{{ request.GET.page }}" name="page">
+                                    <button type="submit" class="btn btn-danger">
+                                        Favoritar <i class="fa-sharp fa-solid fa-heart"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-success">Avaliar</button>
+                                </form>
+                            {% endif %}
                         </div>
                     </div>
                 {% endfor %}

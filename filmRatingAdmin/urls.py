@@ -25,6 +25,7 @@ urlpatterns = [
     path("profile/", include("filmRating.urls.ProfileUrls")),
     path("favorites/", include("filmRating.urls.FavoritesUrls")),
     path("user/", include("filmRating.urls.UserUrls")),
+    path("rating/", include("filmRating.urls.RatingUrls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

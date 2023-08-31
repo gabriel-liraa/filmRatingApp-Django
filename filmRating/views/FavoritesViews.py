@@ -30,10 +30,9 @@ def favorites_view(request):
             return redirect(f"/?msg={msg}&type={_type}")
 
     else:
-        msg = "É preciso uma conta para acessar a página de favoritos."
-        _type = "danger"
-
-        return redirect(to=f"/?=msg={msg}&type={_type}", status=200)
+        msg = "É preciso estar em uma conta para acessar os filmes favoritados."
+        _type = "warning"
+        return redirect(to=f"/user/login/?msg={msg}&type={_type}", status=200)
 
 
 def add_favorite_view(request, id):
@@ -54,8 +53,9 @@ def add_favorite_view(request, id):
             _type = "danger"
 
     else:
-        msg = "É preciso uma conta para favoritar um filme"
-        _type = "danger"
+        msg = "É preciso estar em uma conta para favoritar um filme."
+        _type = "warning"
+        return redirect(to=f"/user/login/?msg={msg}&type={_type}", status=200)
 
     post_copy += ("&" if post_copy else "?") + f"msg={msg}&type={_type}"
 

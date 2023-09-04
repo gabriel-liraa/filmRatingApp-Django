@@ -73,7 +73,9 @@
                                     <button type="submit" class="btn btn-danger">
                                         Desfavoritar <i class="fa-sharp fa-solid fa-heart"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline-success">Avaliar</button>
+                                    <a href={% url "add-rating" film.id %}>
+                                        <button type="button" class="btn btn-success">Avaliar</button>
+                                    </a>
                                 </form>
                             {% else %}
                                 <form action={% url "add-favorite" film.id %} method="POST">
@@ -84,7 +86,9 @@
                                     <button type="submit" class="btn btn-danger">
                                         Favoritar <i class="fa-sharp fa-solid fa-heart"></i>
                                     </button>
-                                    <button type="button" class="btn btn-success">Avaliar</button>
+                                    <a href={% url "add-rating" film.id %}>
+                                        <button type="button" class="btn btn-success">Avaliar</button>
+                                    </a>
                                 </form>
                             {% endif %}
                         </div>

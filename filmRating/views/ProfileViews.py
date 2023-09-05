@@ -2,6 +2,7 @@ from filmRating.models.Profile import Profile
 from filmRating.models.Film import Film
 from filmRating.forms.UserProfileForm import UserProfileForm, UserForm
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 
@@ -30,6 +31,7 @@ def profile_view(request, id):
         return redirect(to=f"/{parameters}", status=200)
 
 
+@login_required
 def edit_profile(request):
     emailUnused = True
     message = None

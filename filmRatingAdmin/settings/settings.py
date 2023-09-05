@@ -128,9 +128,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-LOGIN_URL = "user/login"
+LOGIN_URL = "/user/login"
 LOGIN_REDIRECT_URL = "/"
-LOGOUT_URL = "user/logout"
+LOGOUT_URL = "/user/logout"
 LOGOUT_REDIRECT_URL = "/"
 
 AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)

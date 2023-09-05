@@ -32,7 +32,9 @@
                         </div>
                         <div class="px-3">
                             <p class="mb-2 h5">{{ profile.user.ratings.all|length }}</p>
-                            <p class="text-muted mb-0">Filmes Avaliados</p>
+                            <a href={% url "rated-films" %}>
+                                <p class="text-muted mb-0">Filmes Avaliados</p>
+                            </a>
                         </div>
                         <div>
                             <p class="mb-2 h5">{{ profile.favorites.all|length }}</p>

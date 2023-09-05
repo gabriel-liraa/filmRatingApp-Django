@@ -1,4 +1,5 @@
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from filmRating.forms.UserForms import UserLoginForm, UserRegisterForm
@@ -12,6 +13,9 @@ def login_view(request):
         )
         if user_login is not None:
             login(request, user_login)
+            _next = request.GET.get("next")
+            if _next is not None:
+                return redirect(to=f"{_next}")
             return redirect(to="home")
         else:
             msg = f"Combinação de usuário e senha não encontrada."
@@ -29,6 +33,7 @@ def login_view(request):
         return render(request, "user/auth.html", context=context, status=200)
 
 
+@login_required
 def logout_view(request):
     logout(request)
     return redirect(to="home")

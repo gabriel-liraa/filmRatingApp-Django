@@ -1,9 +1,11 @@
 from filmRating.forms.RatingForm import RatingForm
 from filmRating.models import Film, Rating
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 
 
+@login_required
 def add_rating_view(request, film_id):
     if not request.user.is_authenticated:
         return redirect(to="/user/login")
@@ -22,10 +24,10 @@ def add_rating_view(request, film_id):
 
     if forms.is_valid():
         forms.save()
-        message = {
-            "type": "success",
-            "msg": "Avaliação foi salva com sucesso!",
-        }
+        _type = "success"
+        msg = "Avaliação foi salva com sucesso!"
+
+        return redirect(to=f"/rating/rated_films/?msg={msg}&type={_type}")
 
     else:
         if request.method == "POST":
@@ -43,6 +45,7 @@ def add_rating_view(request, film_id):
     return render(request, "ratings/ratings.html", context=context, status=200)
 
 
+@login_required
 def remove_rating_view(request, film_id):
     rating = Rating.objects.filter(film_rated__id=film_id).first()
     try:
@@ -57,6 +60,7 @@ def remove_rating_view(request, film_id):
     return redirect(f"/rating/rated_films/?msg={msg}&type={_type}")
 
 
+@login_required
 def rated_films_view(request):
     ratings = Rating.objects.filter(user=request.user).order_by("-created_at").all()
     if len(ratings) > 0:

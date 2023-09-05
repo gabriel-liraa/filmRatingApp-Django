@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Avaliações{% endblock %}
 {% block content %}
+    <h1 class="text-center">Avaliações</h1>
     {% if request.GET.msg %}
         <div class="alert alert-{{ request.GET.type }}" role="alert">{{ request.GET.msg }}</div>
     {% endif %}
